@@ -6,12 +6,14 @@ export class Header extends BasePage {
 
   private readonly shoppingCart: Locator;
   private readonly logo: Locator;
+  private readonly shoppingCartBadge: Locator;
 
   constructor(page: Page) {
     const locator: string = '#react-burger-menu-btn';
     super(page, page.locator(locator));
     this.shoppingCart = page.locator('#shopping_cart_container');
     this.logo = page.getByText('Swag Labs');
+    this.shoppingCartBadge = page.locator('.shopping_cart_link');
   }
 
   async isPageComplete(): Promise<boolean> {
@@ -33,6 +35,14 @@ export class Header extends BasePage {
 
   async openSideBar() {
     await this.mainLocator.click();
+  }
+
+  async findBadgeNumber(): Promise<Number> {
+    if (await this.shoppingCartBadge.count() === 0) {
+      return 0;
+    }
+    const text = await this.shoppingCartBadge.innerText();
+    return Number(text);
   }
 
 }

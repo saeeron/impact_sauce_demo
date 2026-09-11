@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage, Header, SideBar, Products } from '@saeeron/sauce-automation-lib';
+import { LoginPage, Products, Cart, OrderReview, OrderComplete, Checkout } from '@saeeron/sauce-automation-lib';
 
 test.describe('Login', () => {
   test.beforeEach(async ({ page }) => {
@@ -16,6 +16,24 @@ test.describe('Login', () => {
     await products.sortBy('za');
     await products.sortBy('az');
     await products.addItemToCart('Sauce Labs Backpack');
+    expect(await products.getCartItemCountsInBadge()).toBe(1);
+    await products.addItemToCart('Sauce Labs Bike Light');
+    expect(await products.getCartItemCountsInBadge()).toBe(2);
+    expect(await products.clickCart());
+    const cart = new Cart(page);
+    expect(await cart.isPageComplete()).toBe(true);
+    await cart.clickCheckout();
+    const checkout = new Checkout(page);
+    await checkout.enterFirstName('name');
+    await checkout.enterLastName('name');
+    await checkout.enterZipCode('12345');
+    await checkout.clickContinue();
+    const orderReview = new OrderReview(page);
+    await orderReview.clickFinish();
+    const orderComplete = new OrderComplete(page);
+    expect(await orderComplete.isPageComplete()).toBe(true);
+    expect(await orderComplete.isOrderComplete()).toBe(true);
+
     // await header.openSideBar();
     // const sideBar = new SideBar(page);
     // expect(await sideBar.isAt()).toBe(true);

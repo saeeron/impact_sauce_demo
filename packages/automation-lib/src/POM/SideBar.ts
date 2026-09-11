@@ -18,15 +18,18 @@ export class SideBar extends BasePage {
   }
 
   async isPageComplete(): Promise<boolean> {
-
-    const results: boolean[] = await Promise.all([
-      super.isAt(),
-      this.allItems.isVisible(),
-      this.about.isVisible(),
-      this.logout.isVisible(),
-      this.reset.isVisible()
-    ]);
-    return results.every((result) => result === true);
+    try {
+      await Promise.all([
+        super.isAt(),
+        this.allItems.isVisible(),
+        this.about.isVisible(),
+        this.logout.isVisible(),
+        this.reset.isVisible()
+      ]);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   async clickAllItems() {

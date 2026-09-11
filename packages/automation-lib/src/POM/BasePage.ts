@@ -19,8 +19,11 @@ export class BasePage {
   }
 
   async isAt(): Promise<boolean> {
-    await expect(this.mainLocator).toBeVisible();
-    return this.mainLocator.isVisible()
+    try {
+      await this.mainLocator.waitFor({ 'state': 'visible' })
+      return true;
+    } catch {
+      return false;
+    }
   }
-
 }

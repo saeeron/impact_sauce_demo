@@ -9,6 +9,9 @@ export class Products extends BasePage {
   private readonly inventoryContainer: Locator;
   private readonly sortContainer: Locator;
   private readonly inventoryItems: Locator;
+  private readonly inventorySingleItem: Locator;
+  private readonly removeButton: Locator;
+  private readonly addToCartButton: Locator;
 
   constructor(page: Page) {
 
@@ -18,13 +21,18 @@ export class Products extends BasePage {
     this.inventoryContainer = page.locator('#inventory_container').first();
     this.sortContainer = page.locator('.product_sort_container');
     this.inventoryItems = page.locator('.inventory_item');
-
+    this.inventorySingleItem = page.locator('[data-test="inventory-item-name"]');
+    this.removeButton = page.getByRole('button', { name: 'Remove' });
+    this.addToCartButton = page.getByRole('button', { name: 'Add to cart' });
   }
 
   private findItemByName(productName: string) : Locator {
-    return this.inventoryItems.filter({
-      has: this.page.locator('[data-test="inventory-item-name"]', { hasText: productName })
-    });
+    return this.inventoryItems.filter(
+      { has: this.inventorySingleItem.filter({ hasText: productName })});
+  }
+
+  private findAllItemsInCart(): Locator {
+    return this.inventoryItems.filter({ has: this.removeButton });
   }
 
   async isPageComplete() {
@@ -47,7 +55,31 @@ export class Products extends BasePage {
 
   async addItemToCart(name: string) : Promise<void> {
       const item = this.findItemByName(name);
-      await item.locator('button', { hasText: 'Add to cart' }).click();
+      await item.locator(this.addToCartButton).click();
     }
 
+  async removeItemFromCart(name: string): Promise<void> {
+    const item = this.findItemByName(name);
+    await item.locator(this.removeButton).click();
+  }
+
+  async isItemAdded(name: string): Promise<boolean> {
+    const item = this.findItemByName(name);
+    return item.locator(this.removeButton).isVisible();
+  }
+
+  async emptyCart(): Promise<void> {
+    const itemsInCart = this.findAllItemsInCart();
+    while ((await itemsInCart.count()) > 0) {
+        await itemsInCart.first().locator(this.removeButton).click();
+      }
+  }
+
+  async getCartItemCountsInBadge() {
+    return await this.header.findBadgeNumber();
+  }
+
+  async clickCart() {
+    await this.header.clickCart();
+  }
 }
