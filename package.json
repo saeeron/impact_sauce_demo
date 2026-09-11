@@ -1,0 +1,20 @@
+{
+  "name": "impact_assignment",
+  "version": "1.0.0",
+  "description": "**Role:** Senior QA Engineer",
+  "main": "index.js",
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "private": true,
+  "workspaces": ["packages/*", "tests"],
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/node": "^22.20.2"
+  },
+  "dependencies": {
+    "@saeeron/sauce-automation-lib": "*"
+  }
+}
