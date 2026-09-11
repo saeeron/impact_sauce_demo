@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { LoginPage } from '@saeeron/sauce-automation-lib';
+import { LoginPage, Header, SideBar, Products } from '@saeeron/sauce-automation-lib';
 
 test.describe('Login', () => {
   test.beforeEach(async ({ page }) => {
@@ -11,6 +11,15 @@ test.describe('Login', () => {
     await loginPage.goto()
     expect(await loginPage.isPageComplete()).toBe(true);
     await loginPage.login('standard_user', 'secret_sauce');
+    const products = new Products(page);
+    expect(await products.isPageComplete()).toBe(true);
+    await products.sortBy('za');
+    await products.sortBy('az');
+    await products.addItemToCart('Sauce Labs Backpack');
+    // await header.openSideBar();
+    // const sideBar = new SideBar(page);
+    // expect(await sideBar.isAt()).toBe(true);
+    // await sideBar.clickAllItems();
   });
 
 });

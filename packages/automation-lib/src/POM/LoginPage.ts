@@ -1,5 +1,5 @@
 
-import { Page, Locator, expect } from '@playwright/test';
+import { Page, Locator } from '@playwright/test';
 import { BasePage } from './BasePage';
 
 export class LoginPage extends BasePage {
@@ -23,7 +23,7 @@ export class LoginPage extends BasePage {
       super.isAt(),
       this.unameEntry.isVisible(),
       this.pwdEntry.isVisible(),
-      this.logo.isVisible()
+      this.logo.isVisible(),
     ]);
 
     return results.every((result) => result === true);
