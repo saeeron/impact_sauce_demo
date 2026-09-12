@@ -1,44 +1,39 @@
-import { test, expect } from '@playwright/test';
-import { LoginPage, Products, Cart, OrderReview, OrderComplete, Checkout } from '@saeeron/sauce-automation-lib';
+import { test, expect } from '@saeeron/sauce-automation-lib';
+
 
 test.describe('Login', () => {
   test.beforeEach(async ({ page }) => {
-      await page.goto('/'); // runs before every test in this block only
+      await page.goto('/');
   });
 
-  test('Verify standard user can log in successfully', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test('Verify standard user can log in successfully', async ({ loginPage, products }) => {
     await loginPage.goto()
     expect(await loginPage.isPageComplete()).toBe(true);
     await loginPage.login('standard_user', 'secret_sauce');
     expect(await loginPage.isErrorMessageNotVisible()).toBe(true);
-    const products = new Products(page);
     expect(await products.isPageComplete());
   });
 
-  test('Verify locked out user cannot log in and error message is shown', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test('Verify locked out user cannot log in and error message is shown', async ({ loginPage }) => {
     await loginPage.goto()
     expect(await loginPage.isPageComplete()).toBe(true);
     await loginPage.login('locked_out_user', 'secret_sauce');
     expect(await loginPage.isErrorMessageNotVisible()).toBe(false);
     expect(await loginPage.returnErrorMessage()).toBe('Epic sadface: Sorry, this user has been locked out.')
-    const products = new Products(page);
     expect(await loginPage.isPageComplete()).toBe(true);
   })
 });
 
 test.describe('Complete Order', () => {
   test.beforeEach(async ({ page }) => {
-      await page.goto('/'); // runs before every test in this block only
+      await page.goto('/');
   });
 
-  test('Verify standard user can complete an order', async ({ page }) => {
-    const loginPage = new LoginPage(page);
+  test('Verify standard user can complete an order', async ({ loginPage, products, orderComplete, orderReview, cart, checkout }) => {
+
     await loginPage.goto()
     expect(await loginPage.isPageComplete()).toBe(true);
     await loginPage.login('standard_user', 'secret_sauce');
-    const products = new Products(page);
     expect(await products.isPageComplete());
     await products.addItemToCart('Sauce Labs Backpack')
     expect(await products.getCartItemCountsInBadge()).toBe(1);
@@ -51,22 +46,17 @@ test.describe('Complete Order', () => {
     await products.removeItemFromCart('Sauce Labs Backpack');
     expect(await products.getCartItemCountsInBadge()).toBe(2);
     await products.clickCart();
-    const cart = new Cart(page);
     expect(await cart.isPageComplete()).toBe(true);
     await cart.clickCheckout();
-    const checkout = new Checkout(page);
     expect(await checkout.isPageComplete()).toBe(true);
     await checkout.enterFirstName('name');
     await checkout.enterLastName('name');
     await checkout.enterZipCode('12345');
     await checkout.clickContinue();
-    const orderReview = new OrderReview(page);
     expect(await orderReview.isPageComplete()).toBe(true);
     await orderReview.clickFinish();
-    const orderComplete = new OrderComplete(page);
     expect(await orderComplete.isPageComplete()).toBe(true);
     expect(await orderComplete.isOrderComplete()).toBe(true);
-
   })
 });
 

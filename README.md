@@ -5,3 +5,4 @@
    - how to use `data-test` as locator
    - how lazy element finding works
    - immediate check vs retrying check; `expect(await ....)` vs `await expect.poll( ...`
+   - how to include fixtures in automation lib and how import it in main project
