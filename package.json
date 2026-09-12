@@ -10,12 +10,9 @@
   "type": "commonjs",
   "private": true,
   "workspaces": ["packages/*", "tests"],
-  "devDependencies": {
-    "@playwright/test": "^1.63.0",
-    "@types/node": "^22.20.2"
-  },
   "dependencies": {
     "@saeeron/sauce-automation-lib": "*",
-    "@saeeron/api-client": "*"
+    "@saeeron/api-client-lib": "*",
+    "@saeeron/db-client-lib" : "*"
   }
 }

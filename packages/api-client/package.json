@@ -1,10 +1,15 @@
 {
-  "name": "@saeeron/api-client",
+  "name": "@saeeron/api-client-lib",
   "version": "1.0.0",
   "private": true,
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
     "build": "tsc"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0",
+    "typescript": "^5.5.0",
+    "@types/node": "^20.0.0"
   }
 }
