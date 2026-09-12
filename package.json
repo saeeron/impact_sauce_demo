@@ -15,6 +15,7 @@
     "@types/node": "^22.20.2"
   },
   "dependencies": {
-    "@saeeron/sauce-automation-lib": "*"
+    "@saeeron/sauce-automation-lib": "*",
+    "@saeeron/api-client": "*"
   }
 }
