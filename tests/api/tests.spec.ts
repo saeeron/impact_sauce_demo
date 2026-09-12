@@ -1,12 +1,14 @@
 
-import { test, expect } from '@saeeron/api-client-lib';
+import { test, expect, User, CreateUserRequest } from '@saeeron/api-client-lib';
 
 test('Verify create and retrieve user', async ({ users }) => {
 
-  const createdUser = await users.createUser({
+  const createdUser : User = await users.createUser({
     username: 'standard_user',
     password: 'password123',
-    email: 'standard@saucedemo.com'
+    email: 'standard@saucedemo.com',
+    firstName: 'standard_sauce',
+    lastName: 'last_sauce'
   });
 
   expect(createdUser.id).toBeDefined();

@@ -1,12 +1,11 @@
-export interface User {
-  id: string;
+export interface CreateUserRequest {
   firstName: string;
   lastName: string;
-  email: string;
-}
-
-export interface CreateUserRequest {
   username: string;
   password: string;
   email: string;
+}
+
+export interface User extends CreateUserRequest {
+  id: string;
 }

@@ -3,7 +3,13 @@
   "version": "1.0.0",
   "description": "**Role:** Senior QA Engineer",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:ui": "playwright test tests/ui",
+    "test:ui:dev": "playwright test tests/ui --headed --ui",
+    "test:api": "playwright test tests/api",
+    "test:db": "playwright test tests/db",
+    "test:integration": "playwright test tests/integration"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
