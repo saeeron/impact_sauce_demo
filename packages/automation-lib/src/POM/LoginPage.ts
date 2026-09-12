@@ -7,6 +7,7 @@ export class LoginPage extends BasePage {
   private readonly unameEntry: Locator;
   private readonly pwdEntry: Locator;
   private readonly logo: Locator;
+  private readonly errorMessage: Locator;
 
 
   constructor(page: Page) {
@@ -15,6 +16,7 @@ export class LoginPage extends BasePage {
     this.unameEntry = page.locator('#user-name');
     this.pwdEntry = page.locator('#password');
     this.logo = page.getByText('Swag Labs');
+    this.errorMessage = page.getByRole('alert');
   }
 
   async isPageComplete(): Promise<boolean> {
@@ -28,8 +30,6 @@ export class LoginPage extends BasePage {
 
     return results.every((result) => result === true);
   }
-
-
 
   async enterUsername(username: string) {
     await this.unameEntry.fill(username);
@@ -46,6 +46,19 @@ export class LoginPage extends BasePage {
     await this.enterUsername(username);
     await this.enterPassword(password);
     await this.clickLogin();
+  }
+
+  async isErrorMessageNotVisible(): Promise<boolean> {
+      return !(await this.errorMessage.isVisible());
+  }
+
+  async returnErrorMessage() : Promise<string | null > {
+    try {
+      await this.errorMessage.waitFor({ state: 'visible' });
+      return this.errorMessage.innerText();
+    } catch {
+      return null;
+    }
   }
 
 }

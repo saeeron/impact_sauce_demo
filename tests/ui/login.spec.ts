@@ -6,41 +6,99 @@ test.describe('Login', () => {
       await page.goto('/'); // runs before every test in this block only
   });
 
-  test('standard user can log in successfully', async ({ page }) => {
+  test('Verify standard user can log in successfully', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto()
+    expect(await loginPage.isPageComplete()).toBe(true);
+    await loginPage.login('standard_user', 'secret_sauce');
+    expect(await loginPage.isErrorMessageNotVisible()).toBe(true);
+    const products = new Products(page);
+    expect(await products.isPageComplete());
+  });
+
+  test('Verify locked out user cannot log in and error message is shown', async ({ page }) => {
+    const loginPage = new LoginPage(page);
+    await loginPage.goto()
+    expect(await loginPage.isPageComplete()).toBe(true);
+    await loginPage.login('locked_out_user', 'secret_sauce');
+    expect(await loginPage.isErrorMessageNotVisible()).toBe(false);
+    expect(await loginPage.returnErrorMessage()).toBe('Epic sadface: Sorry, this user has been locked out.')
+    const products = new Products(page);
+    expect(await loginPage.isPageComplete()).toBe(true);
+  })
+});
+
+test.describe('Complete Order', () => {
+  test.beforeEach(async ({ page }) => {
+      await page.goto('/'); // runs before every test in this block only
+  });
+
+  test('Verify standard user can complete an order', async ({ page }) => {
     const loginPage = new LoginPage(page);
     await loginPage.goto()
     expect(await loginPage.isPageComplete()).toBe(true);
     await loginPage.login('standard_user', 'secret_sauce');
     const products = new Products(page);
-    expect(await products.isPageComplete()).toBe(true);
-    await products.sortBy('za');
-    await products.sortBy('az');
-    await products.addItemToCart('Sauce Labs Backpack');
+    expect(await products.isPageComplete());
+    await products.addItemToCart('Sauce Labs Backpack')
     expect(await products.getCartItemCountsInBadge()).toBe(1);
-    await products.addItemToCart('Sauce Labs Bike Light');
+    await products.sortBy('lohi');
+    await products.addItemToCart('Sauce Labs Onesie');
     expect(await products.getCartItemCountsInBadge()).toBe(2);
-    expect(await products.clickCart());
+    await products.sortBy('za');
+    await products.addItemToCart('Sauce Labs Fleece Jacket');
+    expect(await products.getCartItemCountsInBadge()).toBe(3);
+    await products.removeItemFromCart('Sauce Labs Backpack');
+    expect(await products.getCartItemCountsInBadge()).toBe(2);
+    await products.clickCart();
     const cart = new Cart(page);
     expect(await cart.isPageComplete()).toBe(true);
     await cart.clickCheckout();
     const checkout = new Checkout(page);
+    expect(await checkout.isPageComplete()).toBe(true);
     await checkout.enterFirstName('name');
     await checkout.enterLastName('name');
     await checkout.enterZipCode('12345');
     await checkout.clickContinue();
     const orderReview = new OrderReview(page);
+    expect(await orderReview.isPageComplete()).toBe(true);
     await orderReview.clickFinish();
     const orderComplete = new OrderComplete(page);
     expect(await orderComplete.isPageComplete()).toBe(true);
     expect(await orderComplete.isOrderComplete()).toBe(true);
 
+  })
+});
+
+
+    // const products = new Products(page);
+    // expect(await products.isPageComplete()).toBe(true);
+    // await products.sortBy('za');
+    // await products.sortBy('az');
+    // await products.addItemToCart('Sauce Labs Backpack');
+    // expect(await products.getCartItemCountsInBadge()).toBe(1);
+    // await products.addItemToCart('Sauce Labs Bike Light');
+    // expect(await products.getCartItemCountsInBadge()).toBe(2);
+    // expect(await products.clickCart());
+    // const cart = new Cart(page);
+    // expect(await cart.isPageComplete()).toBe(true);
+    // await cart.clickCheckout();
+    // const checkout = new Checkout(page);
+    // await checkout.enterFirstName('name');
+    // await checkout.enterLastName('name');
+    // await checkout.enterZipCode('12345');
+    // await checkout.clickContinue();
+    // const orderReview = new OrderReview(page);
+    // await orderReview.clickFinish();
+    // const orderComplete = new OrderComplete(page);
+    // expect(await orderComplete.isPageComplete()).toBe(true);
+    // expect(await orderComplete.isOrderComplete()).toBe(true);
+
     // await header.openSideBar();
     // const sideBar = new SideBar(page);
     // expect(await sideBar.isAt()).toBe(true);
     // await sideBar.clickAllItems();
-  });
 
-});
 
 // test('has title', async ({ page }) => {
 //   await page.goto('https://playwright.dev/');

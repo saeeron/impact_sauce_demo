@@ -20,6 +20,21 @@ export class OrderReview extends BasePage {
 
   }
 
+  async isPageComplete() {
+    try {
+      await Promise.all([
+        super.isAt(),
+        this.header.isPageComplete(),
+        this.checkoutOverviewLabel.waitFor({ state: 'visible' }),
+        this.finishButton.waitFor({ state: 'visible' }),
+        this.cancelButton.waitFor({ state: 'visible' })
+      ])
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
   async clickFinish() : Promise<void> {
     await this.finishButton.click();
   }
