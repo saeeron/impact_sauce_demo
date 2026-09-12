@@ -5,7 +5,7 @@ import { getDbConfigFromEnv } from '../db-config';
 export const test = base.extend<{ db: DbClient }>({
   db: async ({}, use) => {
     const db = new DbClient(getDbConfigFromEnv());
-    await use(db); // built-in fixture
+    await use(db);
     await db.close();
   },
 });

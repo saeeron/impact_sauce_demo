@@ -1,5 +1,5 @@
 import { test as base, expect} from '@playwright/test';
-import { Cart, Checkout, LoginPage, OrderComplete, OrderReview, Products } from '@saeeron/sauce-automation-lib';
+import { Cart, Checkout, LoginPage, OrderComplete, OrderReview, Products } from '../POM';
 
 type Fixtures = {
   loginPage: LoginPage;
