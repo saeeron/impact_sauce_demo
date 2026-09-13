@@ -7,7 +7,7 @@
    - immediate check vs retrying check; `expect(await ....)` vs `await expect.poll( ...`
    - how to include fixtures in automation lib and how import it in main project
    - how to use `mysql2` lib in TypeScript
-   -
+   - how to make npm build all nested packages via workspaces 
 
 
 ##Areas to improve

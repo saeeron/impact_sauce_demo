@@ -1,24 +1,29 @@
 {
   "name": "impact_assignment",
   "version": "1.0.0",
-  "description": "**Role:** Senior QA Engineer",
+  "description": "TypeScript Playwright project to implement three automation packages and exploit them in testing",
   "main": "index.js",
   "scripts": {
     "test:ui": "playwright test tests/ui",
     "test:ui:dev": "playwright test tests/ui --headed --ui",
     "test:api": "playwright test tests/api",
     "test:db": "playwright test tests/db",
-    "test:integration": "playwright test tests/integration"
+    "test:integration": "playwright test tests/integration",
+    "build:all": "npm run build --workspaces"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "type": "commonjs",
   "private": true,
-  "workspaces": ["packages/*", "tests"],
-  "dependencies": {
-    "@saeeron/sauce-automation-lib": "*",
+  "workspaces": [
+    "packages/*",
+    "tests"
+  ],
+  "devDependencies": {
     "@saeeron/api-client-lib": "*",
-    "@saeeron/db-client-lib" : "*"
+    "@saeeron/db-client-lib": "*",
+    "@saeeron/sauce-automation-lib": "*",
+    "typescript": "^7.0.2"
   }
 }
